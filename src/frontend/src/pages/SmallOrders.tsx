@@ -83,21 +83,21 @@ const PRODUCTS = [
     label: "Custom Hoody",
     price: "$39.95",
     emoji: "🧥",
-    img: "/assets/uploads/pc78h.png",
+    img: "/assets/pc78h-019d2e51-66a3-71a9-b423-e7ab3c7013b9.png",
   },
   {
     id: "tee" as const,
     label: "Custom Tee Shirt",
     price: "$29.95",
     emoji: "👕",
-    img: "/assets/uploads/pc61.png",
+    img: "/assets/pc61-019d2e51-661e-73e8-98de-5c24d4d1be6d.png",
   },
   {
     id: "hat" as const,
     label: "Custom Hat",
     price: "$29.95",
     emoji: "🧢",
-    img: "/assets/uploads/richardson 112.png",
+    img: "/assets/richardson_112-019d2e51-65b5-741a-b844-fb389a12d831.png",
   },
   {
     id: "banners" as const,
@@ -192,30 +192,28 @@ function OrderForm({ type, onClose }: OrderFormProps) {
     e.preventDefault();
     setSubmitting(true);
     setError("");
-    const artworkInfo = file
-      ? `Artwork attached: ${file.name} (${(file.size / 1024).toFixed(1)}KB)`
-      : "No artwork attached";
     try {
+      const formData = new FormData();
+      formData.append("access_key", "250cf6ca-f92a-401f-9a50-48c93a35b62b");
+      formData.append(
+        "subject",
+        `New ${product.label} Order - Prints Charming`,
+      );
+      formData.append("from_name", name);
+      formData.append("email", email);
+      formData.append("product", product.label);
+      formData.append("phone", phone);
+      if (type !== "hat") formData.append("size", size);
+      formData.append("color", color || "Not selected");
+      formData.append("placement", placement || "Not selected");
+      formData.append("quantity", String(qty));
+      formData.append("shipping", shippingLabel);
+      formData.append("order_total", `$${total.toFixed(2)}`);
+      formData.append("special_instructions", notes || "None");
+      if (file) formData.append("attachment", file, file.name);
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          access_key: "250cf6ca-f92a-401f-9a50-48c93a35b62b",
-          subject: `New ${product.label} Order - Prints Charming`,
-          from_name: name,
-          email,
-          to_email: "pctonlieorders@gmail.com",
-          product: product.label,
-          phone,
-          ...(type !== "hat" ? { size } : {}),
-          color: color || "Not selected",
-          placement: placement || "Not selected",
-          quantity: qty,
-          shipping: shippingLabel,
-          order_total: `$${total.toFixed(2)}`,
-          special_instructions: notes || "None",
-          artwork: artworkInfo,
-        }),
+        body: formData,
       });
       const data = await res.json();
       if (data.success) {
@@ -460,12 +458,18 @@ function OrderForm({ type, onClose }: OrderFormProps) {
       </div>
 
       {type !== "hat" && (
-        <p className="text-xs text-muted-foreground">
-          *{" "}
-          {type === "hoodie"
-            ? "Sizes 2XL and above incur an upcharge of $3 per size above XL"
-            : "Sizes 2XL and above incur an upcharge of $2 per size above XL"}
-        </p>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">
+            *{" "}
+            {type === "hoodie"
+              ? "Sizes 2XL and above incur an upcharge of $3 per size above XL"
+              : "Sizes 2XL and above incur an upcharge of $2 per size above XL"}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            * Price includes printing a full size image on one side only.
+            Additional sides or placements are available at an extra charge.
+          </p>
+        </div>
       )}
 
       {error && (
@@ -540,7 +544,15 @@ export default function SmallOrders() {
                   className="group bg-white rounded-xl shadow-card hover:shadow-modal transition-all border border-border p-6 flex flex-col items-center text-center gap-3 cursor-pointer hover:border-brand"
                   data-ocid={`products.item.${i + 1}`}
                 >
-                  <span className="text-4xl">{product.emoji}</span>
+                  {product.img ? (
+                    <img
+                      src={product.img}
+                      alt={product.label}
+                      className="h-24 object-contain"
+                    />
+                  ) : (
+                    <span className="text-4xl">{product.emoji}</span>
+                  )}
                   <span className="font-semibold text-foreground">
                     {product.label}
                   </span>

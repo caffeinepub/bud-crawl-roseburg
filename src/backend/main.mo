@@ -1,11 +1,11 @@
-import Migration "migration";
+
 import Map "mo:core/Map";
 import Array "mo:core/Array";
 import Nat "mo:core/Nat";
 import Runtime "mo:core/Runtime";
 
 // Use migration module for upgrade
-(with migration = Migration.run)
+
 actor {
   // Type definitions
   public type ContactSubmission = {

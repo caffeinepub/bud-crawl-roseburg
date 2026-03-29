@@ -7,7 +7,7 @@ export default function LogoSection() {
     <div className="flex justify-center py-10 px-4">
       {!logoError ? (
         <img
-          src="/assets/uploads/prints-charming-logo.png"
+          src="/assets/prints_charming_main_logo-019d2e51-65cd-758c-b83d-1c982af12245.jpg"
           alt="Prints Charming"
           className="w-auto max-w-[380px] h-auto"
           onError={() => setLogoError(true)}

@@ -46,24 +46,23 @@ export default function Quote() {
     setSubmitting(true);
     setError("");
     try {
+      const formData = new FormData();
+      formData.append("access_key", "250cf6ca-f92a-401f-9a50-48c93a35b62b");
+      formData.append(
+        "subject",
+        `Quote Request${service ? ` - ${service}` : ""} - Prints Charming`,
+      );
+      formData.append("from_name", name);
+      formData.append("email", email);
+      formData.append("phone", phone || "Not provided");
+      formData.append("company", company || "Not provided");
+      formData.append("service_needed", service || "Not specified");
+      formData.append("estimated_quantity", quantity || "Not specified");
+      formData.append("description", details);
+      if (file) formData.append("attachment", file, file.name);
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          access_key: "250cf6ca-f92a-401f-9a50-48c93a35b62b",
-          subject: `Quote Request${service ? ` - ${service}` : ""} - Prints Charming`,
-          from_name: name,
-          email,
-          to_email: "pctonlieorders@gmail.com",
-          phone: phone || "Not provided",
-          company: company || "Not provided",
-          service_needed: service || "Not specified",
-          estimated_quantity: quantity || "Not specified",
-          description: details,
-          artwork: file
-            ? `Artwork attached: ${file.name} (${(file.size / 1024).toFixed(1)}KB)`
-            : "No artwork attached",
-        }),
+        body: formData,
       });
       const data = await res.json();
       if (data.success) {

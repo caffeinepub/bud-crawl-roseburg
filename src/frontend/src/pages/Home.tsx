@@ -75,7 +75,6 @@ export default function Home() {
           email,
           phone,
           message,
-          to_email: "pctonlieorders@gmail.com",
         }),
       });
       const data = await res.json();
