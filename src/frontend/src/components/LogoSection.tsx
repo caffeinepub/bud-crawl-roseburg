@@ -1,4 +1,5 @@
 import { useState } from "react";
+import logoImg from "../../public/assets/prints_charming_main_logo-019d2e51-65cd-758c-b83d-1c982af12245.jpg";
 
 export default function LogoSection() {
   const [logoError, setLogoError] = useState(false);
@@ -7,7 +8,7 @@ export default function LogoSection() {
     <div className="flex justify-center py-10 px-4">
       {!logoError ? (
         <img
-          src="/assets/prints_charming_main_logo-019d2e51-65cd-758c-b83d-1c982af12245.jpg"
+          src={logoImg}
           alt="Prints Charming"
           className="w-auto max-w-[380px] h-auto"
           onError={() => setLogoError(true)}

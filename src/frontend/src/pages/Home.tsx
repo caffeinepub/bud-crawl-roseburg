@@ -16,37 +16,38 @@ import Footer from "../components/Footer";
 import Header from "../components/Header";
 import LogoSection from "../components/LogoSection";
 
+// Gallery uses public-folder absolute paths (valid JPEGs)
 const GALLERY_IMAGES = [
   {
-    src: "/assets/uploads/be_wine-019d2e83-7697-73f9-83e4-4c27192f479d-1.jpg",
+    src: "/assets/be_wine-019d2e83-7697-73f9-83e4-4c27192f479d.jpg",
     alt: "Custom apparel - wine",
   },
   {
-    src: "/assets/uploads/keep_laughing-019d2e83-7697-729c-a7da-cce9a28f36bc-2.jpg",
+    src: "/assets/keep_laughing-019d2e83-7697-729c-a7da-cce9a28f36bc.jpg",
     alt: "Custom shirt - keep laughing",
   },
   {
-    src: "/assets/uploads/horse_hat-019d2e83-769d-77d9-b81e-12d6ff3c09a7-3.jpg",
+    src: "/assets/horse_hat-019d2e83-769d-77d9-b81e-12d6ff3c09a7.jpg",
     alt: "Custom horse hat",
   },
   {
-    src: "/assets/uploads/custom_hat-019d2e83-76aa-702b-a7d9-d8e3acca611f-4.jpg",
+    src: "/assets/custom_hat-019d2e83-76aa-702b-a7d9-d8e3acca611f.jpg",
     alt: "Custom hat",
   },
   {
-    src: "/assets/uploads/mug-019d2e83-76b8-7468-8e34-85f107887c4b-5.jpg",
+    src: "/assets/mug-019d2e83-76b8-7468-8e34-85f107887c4b.jpg",
     alt: "Custom mug",
   },
   {
-    src: "/assets/uploads/grafitti_night-019d2e83-76b2-721e-9b29-191ae6837b90-6.jpg",
+    src: "/assets/grafitti_night-019d2e83-76b2-721e-9b29-191ae6837b90.jpg",
     alt: "Graffiti night",
   },
   {
-    src: "/assets/uploads/mush-019d2e83-776f-7471-9025-eccda4e1c96c-7.jpg",
+    src: "/assets/mush-019d2e83-776f-7471-9025-eccda4e1c96c.jpg",
     alt: "Custom mushroom design",
   },
   {
-    src: "/assets/uploads/bag-019d2ebf-eda2-7289-855f-7af620b615eb-1.jpg",
+    src: "/assets/bag-019d2ebf-eda2-7289-855f-7af620b615eb.jpg",
     alt: "Custom bag",
   },
 ];
@@ -74,6 +75,7 @@ export default function Home() {
           subject: "Website Contact Form - Prints Charming",
           from_name: name,
           email,
+          reply_to: email,
           phone,
           message,
         }),
@@ -207,15 +209,6 @@ export default function Home() {
                     src={img.src}
                     alt={img.alt}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      const t = e.currentTarget;
-                      t.style.display = "none";
-                      const parent = t.parentElement;
-                      if (parent) {
-                        parent.style.backgroundColor = "#D7DED9";
-                        parent.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#5D6A63;font-size:12px">${img.alt}</div>`;
-                      }
-                    }}
                   />
                 </div>
               ))}

@@ -15,8 +15,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckCircle2, Loader2, Upload } from "lucide-react";
+import { AlertCircle, CheckCircle2, Loader2, Upload } from "lucide-react";
 import { useRef, useState } from "react";
+import imgTee from "../../public/assets/pc61-019d2e51-661e-73e8-98de-5c24d4d1be6d.png";
+import imgHoodie from "../../public/assets/pc78h-019d2e51-66a3-71a9-b423-e7ab3c7013b9.png";
+import imgHat from "../../public/assets/richardson_112-019d2e51-65b5-741a-b844-fb389a12d831.png";
 import ColorSelect from "../components/ColorSelect";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -84,21 +87,21 @@ const PRODUCTS = [
     label: "Custom Hoody",
     price: "$39.95",
     emoji: "🧥",
-    img: "/assets/pc78h-019d2e51-66a3-71a9-b423-e7ab3c7013b9.png",
+    img: imgHoodie,
   },
   {
     id: "tee" as const,
     label: "Custom Tee Shirt",
     price: "$29.95",
     emoji: "👕",
-    img: "/assets/pc61-019d2e51-661e-73e8-98de-5c24d4d1be6d.png",
+    img: imgTee,
   },
   {
     id: "hat" as const,
     label: "Custom Hat",
     price: "$29.95",
     emoji: "🧢",
-    img: "/assets/richardson_112-019d2e51-65b5-741a-b844-fb389a12d831.png",
+    img: imgHat,
   },
   {
     id: "banners" as const,
@@ -155,9 +158,14 @@ function OrderForm({ type, onClose }: OrderFormProps) {
   const [qty, setQty] = useState(1);
   const [notes, setNotes] = useState("");
   const [shipping, setShipping] = useState("standard");
+  const [shipAddress, setShipAddress] = useState("");
+  const [shipCity, setShipCity] = useState("");
+  const [shipState, setShipState] = useState("");
+  const [shipZip, setShipZip] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [artworkEmailNeeded, setArtworkEmailNeeded] = useState(false);
   const [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [imgError, setImgError] = useState(false);
@@ -195,9 +203,25 @@ function OrderForm({ type, onClose }: OrderFormProps) {
     setError("");
     try {
       let artworkUrl = "";
+      let uploadFailed = false;
+
       if (file) {
-        artworkUrl = await uploadArtwork(file);
+        try {
+          // 30-second timeout for upload
+          const uploadPromise = uploadArtwork(file);
+          const timeoutPromise = new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error("Upload timed out")), 30000),
+          );
+          artworkUrl = await Promise.race([uploadPromise, timeoutPromise]);
+        } catch {
+          uploadFailed = true;
+        }
       }
+
+      const shippingAddress =
+        shipping === "pickup"
+          ? "Local Pickup"
+          : `${shipAddress}, ${shipCity}, ${shipState} ${shipZip}`;
 
       const payload: Record<string, string> = {
         access_key: "250cf6ca-f92a-401f-9a50-48c93a35b62b",
@@ -205,12 +229,14 @@ function OrderForm({ type, onClose }: OrderFormProps) {
         subject: `New ${product.label} Order - Prints Charming`,
         from_name: name,
         email: email,
+        reply_to: email,
         product: product.label,
-        phone: phone,
+        phone: phone || "Not provided",
         color: color || "Not selected",
         placement: placement || "Not selected",
         quantity: String(qty),
         shipping: shippingLabel,
+        shipping_address: shippingAddress,
         order_total: `$${total.toFixed(2)}`,
         special_instructions: notes || "None",
       };
@@ -219,8 +245,14 @@ function OrderForm({ type, onClose }: OrderFormProps) {
         payload.size = size;
       }
 
-      if (file && artworkUrl) {
-        payload.artwork_file_url = `${file.name} — ${artworkUrl}`;
+      if (file) {
+        if (uploadFailed || !artworkUrl) {
+          payload.artwork_note =
+            `*** ARTWORK NEEDED: Customer submitted artwork file "${file.name}" but it could not be attached. ` +
+            `Please reply to this email or call ${email} / ${phone || "see email above"} to request the file directly. ***`;
+        } else {
+          payload.artwork = `Artwork file: ${file.name}\nDownload: ${artworkUrl}`;
+        }
       }
 
       const res = await fetch("https://api.web3forms.com/submit", {
@@ -233,6 +265,7 @@ function OrderForm({ type, onClose }: OrderFormProps) {
       });
       const data = await res.json();
       if (data.success) {
+        setArtworkEmailNeeded(uploadFailed && !!file);
         setSubmitted(true);
       } else {
         setError(
@@ -259,6 +292,40 @@ function OrderForm({ type, onClose }: OrderFormProps) {
           Thanks! We'll review your order and follow up at {email} within 1–2
           business days.
         </p>
+        {artworkEmailNeeded && (
+          <div
+            className="w-full rounded-lg p-4 border-2 mt-2"
+            style={{ borderColor: "#C97C1A", backgroundColor: "#FEF9EC" }}
+          >
+            <div className="flex items-start gap-2">
+              <AlertCircle
+                size={18}
+                className="flex-shrink-0 mt-0.5"
+                style={{ color: "#C97C1A" }}
+              />
+              <div>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "#7A4D0F" }}
+                >
+                  Please email your artwork separately
+                </p>
+                <p className="text-xs mt-1" style={{ color: "#7A4D0F" }}>
+                  Your artwork file could not be uploaded automatically. Please
+                  email it directly to{" "}
+                  <a
+                    href="mailto:pctonlieorders@gmail.com"
+                    className="underline font-semibold"
+                  >
+                    pctonlieorders@gmail.com
+                  </a>{" "}
+                  with your name in the subject line so we can match it to your
+                  order.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
         <Button
           onClick={onClose}
           className="mt-2"
@@ -415,6 +482,68 @@ function OrderForm({ type, onClose }: OrderFormProps) {
         </Select>
       </div>
 
+      {shipping === "standard" && (
+        <div
+          className="rounded-lg border border-border p-4 space-y-3"
+          style={{ backgroundColor: "#F3F6F4" }}
+        >
+          <p
+            className="text-xs font-bold uppercase tracking-wider"
+            style={{ color: "#1F3B2F" }}
+          >
+            Shipping Address
+          </p>
+          <div>
+            <Label className="text-xs font-semibold">Street Address *</Label>
+            <Input
+              value={shipAddress}
+              onChange={(e) => setShipAddress(e.target.value)}
+              required
+              placeholder="123 Main St"
+              className="mt-1 h-9 text-sm"
+              data-ocid={`${type}_order.ship_address`}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label className="text-xs font-semibold">City *</Label>
+              <Input
+                value={shipCity}
+                onChange={(e) => setShipCity(e.target.value)}
+                required
+                placeholder="Roseburg"
+                className="mt-1 h-9 text-sm"
+                data-ocid={`${type}_order.ship_city`}
+              />
+            </div>
+            <div>
+              <Label className="text-xs font-semibold">State *</Label>
+              <Input
+                value={shipState}
+                onChange={(e) => setShipState(e.target.value)}
+                required
+                placeholder="OR"
+                maxLength={2}
+                className="mt-1 h-9 text-sm"
+                data-ocid={`${type}_order.ship_state`}
+              />
+            </div>
+          </div>
+          <div>
+            <Label className="text-xs font-semibold">ZIP Code *</Label>
+            <Input
+              value={shipZip}
+              onChange={(e) => setShipZip(e.target.value)}
+              required
+              placeholder="97470"
+              maxLength={10}
+              className="mt-1 h-9 text-sm"
+              data-ocid={`${type}_order.ship_zip`}
+            />
+          </div>
+        </div>
+      )}
+
       <div>
         <Label className="text-xs font-semibold">Special Instructions</Label>
         <Textarea
@@ -447,6 +576,16 @@ function OrderForm({ type, onClose }: OrderFormProps) {
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           accept="image/*,.pdf,.ai,.eps,.svg"
         />
+        <p className="text-xs text-muted-foreground mt-1">
+          If upload fails, you can email artwork to{" "}
+          <a
+            href="mailto:pctonlieorders@gmail.com"
+            className="underline"
+            style={{ color: "#1F3B2F" }}
+          >
+            pctonlieorders@gmail.com
+          </a>
+        </p>
       </div>
 
       {/* Live Total */}
@@ -510,7 +649,7 @@ function OrderForm({ type, onClose }: OrderFormProps) {
         {submitting ? (
           <>
             <Loader2 size={16} className="mr-2 animate-spin" />
-            Submitting...
+            {file ? "Uploading artwork & submitting..." : "Submitting..."}
           </>
         ) : (
           `Submit ${product.label} Order`

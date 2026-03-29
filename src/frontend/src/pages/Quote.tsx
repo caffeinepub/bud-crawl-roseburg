@@ -49,7 +49,11 @@ export default function Quote() {
     try {
       let artworkUrl = "";
       if (file) {
-        artworkUrl = await uploadArtwork(file);
+        try {
+          artworkUrl = await uploadArtwork(file);
+        } catch {
+          artworkUrl = "UPLOAD_FAILED";
+        }
       }
 
       const payload: Record<string, string> = {
@@ -58,6 +62,7 @@ export default function Quote() {
         subject: "New Quote Request - Prints Charming",
         from_name: name,
         email: email,
+        reply_to: email,
         phone: phone || "Not provided",
         company: company || "Not provided",
         service_needed: service || "Not specified",
@@ -65,8 +70,12 @@ export default function Quote() {
         description: details,
       };
 
-      if (file && artworkUrl) {
-        payload.artwork_file_url = `${file.name} — ${artworkUrl}`;
+      if (file) {
+        if (artworkUrl === "UPLOAD_FAILED") {
+          payload.artwork_note = `Customer attached artwork file: "${file.name}" but upload failed. Please follow up with them via email or phone to get the artwork.`;
+        } else if (artworkUrl) {
+          payload.artwork = `Artwork file: ${file.name}\nDownload: ${artworkUrl}`;
+        }
       }
 
       const res = await fetch("https://api.web3forms.com/submit", {
