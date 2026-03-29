@@ -1,87 +1,56 @@
+import Migration "migration";
 import Map "mo:core/Map";
 import Array "mo:core/Array";
 import Nat "mo:core/Nat";
 import Runtime "mo:core/Runtime";
 
-
-
+// Use migration module for upgrade
+(with migration = Migration.run)
 actor {
-  public type ContactForm = {
+  // Type definitions
+  public type ContactSubmission = {
     name : Text;
     email : Text;
+    phone : Text;
     message : Text;
   };
 
-  public type GalleryImage = {
-    id : Nat;
-    title : Text;
-    description : Text;
-    imageUrl : Text;
-  };
+  // Storage
+  let submissions = Map.empty<Nat, ContactSubmission>();
+  var nextId = 0;
 
-  let contacts = Map.empty<Nat, ContactForm>();
-  let gallery = Map.empty<Nat, GalleryImage>();
-
-  var nextContactId = 0;
-  var nextGalleryId = 0;
-
-  func getGalleryImageInternal(id : Nat) : GalleryImage {
-    switch (gallery.get(id)) {
-      case (?image) { image };
-      case (null) { Runtime.trap("Gallery image with id " # id.toText() # " does not exist. ") };
+  func getSubmissionInternal(id : Nat) : ContactSubmission {
+    switch (submissions.get(id)) {
+      case (?submission) { submission };
+      case (null) {
+        Runtime.trap(
+          "Submission with id " # id.toText() # " does not exist."
+        );
+      };
     };
   };
 
-  func getContactInternal(id : Nat) : ContactForm {
-    switch (contacts.get(id)) {
-      case (?contact) { contact };
-      case (null) { Runtime.trap("Contact with id " # id.toText() # " does not exist. ") };
-    };
-  };
-
-  // Submit new contact form
-  public shared ({ caller }) func submitContact(form : ContactForm) : async Nat {
-    let id = nextContactId;
-    contacts.add(id, form);
-    nextContactId += 1;
+  // Add new contact submission
+  public shared ({ caller }) func submitContact(form : ContactSubmission) : async Nat {
+    let id = nextId;
+    submissions.add(id, form);
+    nextId += 1;
     id;
   };
 
-  // Add new gallery image
-  public shared ({ caller }) func addGalleryImage(image : GalleryImage) : async Nat {
-    let newImage = {
-      image with
-      id = nextGalleryId;
-    };
-    gallery.add(nextGalleryId, newImage);
-    nextGalleryId += 1;
-    newImage.id;
+  // Get all contact submissions
+  public query ({ caller }) func getAllSubmissions() : async [ContactSubmission] {
+    submissions.values().toArray();
   };
 
-  // Get all contact forms
-  public query ({ caller }) func getAllContacts() : async [ContactForm] {
-    contacts.toArray().map(func((k, v)) { v });
+  // Get specific submission by id
+  public query ({ caller }) func getSubmission(id : Nat) : async ContactSubmission {
+    getSubmissionInternal(id);
   };
 
-  // Get all gallery images
-  public query ({ caller }) func getAllGalleryImages() : async [GalleryImage] {
-    gallery.toArray().map(func((k, v)) { v });
-  };
-
-  // Get specific gallery image by id
-  public query ({ caller }) func getGalleryImage(id : Nat) : async GalleryImage {
-    getGalleryImageInternal(id);
-  };
-
-  // Delete gallery image
-  public shared ({ caller }) func deleteGalleryImage(id : Nat) : async () {
-    ignore getGalleryImageInternal(id);
-    gallery.remove(id);
-  };
-
-  // Delete contact (not used in frontend but good to have)
-  public shared ({ caller }) func deleteContact(id : Nat) : async () {
-    ignore getContactInternal(id);
-    contacts.remove(id);
+  // Delete submission by id
+  public shared ({ caller }) func deleteSubmission(id : Nat) : async () {
+    ignore getSubmissionInternal(id);
+    submissions.remove(id);
   };
 };

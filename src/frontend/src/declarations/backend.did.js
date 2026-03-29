@@ -8,51 +8,35 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const GalleryImage = IDL.Record({
-  'id' : IDL.Nat,
-  'title' : IDL.Text,
-  'description' : IDL.Text,
-  'imageUrl' : IDL.Text,
-});
-export const ContactForm = IDL.Record({
+export const ContactSubmission = IDL.Record({
   'name' : IDL.Text,
   'email' : IDL.Text,
   'message' : IDL.Text,
+  'phone' : IDL.Text,
 });
 
 export const idlService = IDL.Service({
-  'addGalleryImage' : IDL.Func([GalleryImage], [IDL.Nat], []),
-  'deleteContact' : IDL.Func([IDL.Nat], [], []),
-  'deleteGalleryImage' : IDL.Func([IDL.Nat], [], []),
-  'getAllContacts' : IDL.Func([], [IDL.Vec(ContactForm)], ['query']),
-  'getAllGalleryImages' : IDL.Func([], [IDL.Vec(GalleryImage)], ['query']),
-  'getGalleryImage' : IDL.Func([IDL.Nat], [GalleryImage], ['query']),
-  'submitContact' : IDL.Func([ContactForm], [IDL.Nat], []),
+  'deleteSubmission' : IDL.Func([IDL.Nat], [], []),
+  'getAllSubmissions' : IDL.Func([], [IDL.Vec(ContactSubmission)], ['query']),
+  'getSubmission' : IDL.Func([IDL.Nat], [ContactSubmission], ['query']),
+  'submitContact' : IDL.Func([ContactSubmission], [IDL.Nat], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const GalleryImage = IDL.Record({
-    'id' : IDL.Nat,
-    'title' : IDL.Text,
-    'description' : IDL.Text,
-    'imageUrl' : IDL.Text,
-  });
-  const ContactForm = IDL.Record({
+  const ContactSubmission = IDL.Record({
     'name' : IDL.Text,
     'email' : IDL.Text,
     'message' : IDL.Text,
+    'phone' : IDL.Text,
   });
   
   return IDL.Service({
-    'addGalleryImage' : IDL.Func([GalleryImage], [IDL.Nat], []),
-    'deleteContact' : IDL.Func([IDL.Nat], [], []),
-    'deleteGalleryImage' : IDL.Func([IDL.Nat], [], []),
-    'getAllContacts' : IDL.Func([], [IDL.Vec(ContactForm)], ['query']),
-    'getAllGalleryImages' : IDL.Func([], [IDL.Vec(GalleryImage)], ['query']),
-    'getGalleryImage' : IDL.Func([IDL.Nat], [GalleryImage], ['query']),
-    'submitContact' : IDL.Func([ContactForm], [IDL.Nat], []),
+    'deleteSubmission' : IDL.Func([IDL.Nat], [], []),
+    'getAllSubmissions' : IDL.Func([], [IDL.Vec(ContactSubmission)], ['query']),
+    'getSubmission' : IDL.Func([IDL.Nat], [ContactSubmission], ['query']),
+    'submitContact' : IDL.Func([ContactSubmission], [IDL.Nat], []),
   });
 };
 

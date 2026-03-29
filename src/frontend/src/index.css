@@ -6,60 +6,54 @@
 
 @layer base {
   :root {
-    /* Forest green + warm cream + copper/gold palette */
-    --background: 0.97 0.012 85;
-    --foreground: 0.15 0.015 85;
+    /* Forest green palette */
+    --background: 0.97 0.008 150;
+    --foreground: 0.13 0.018 150;
 
     --card: 1 0 0;
-    --card-foreground: 0.15 0.015 85;
+    --card-foreground: 0.13 0.018 150;
 
     --popover: 1 0 0;
-    --popover-foreground: 0.15 0.015 85;
+    --popover-foreground: 0.13 0.018 150;
 
-    /* Deep forest green as primary */
-    --primary: 0.32 0.09 155;
-    --primary-foreground: 0.97 0.008 85;
+    /* Dark forest green as primary — #1F3B2F */
+    --primary: 0.28 0.065 155;
+    --primary-foreground: 0.98 0.005 150;
 
-    /* Soft sage secondary */
-    --secondary: 0.91 0.025 150;
-    --secondary-foreground: 0.28 0.07 155;
+    /* Accent green — #2E5A44 */
+    --secondary: 0.4 0.075 155;
+    --secondary-foreground: 0.98 0.005 150;
 
-    --muted: 0.93 0.012 85;
-    --muted-foreground: 0.52 0.02 85;
+    /* Off-white muted */
+    --muted: 0.94 0.01 150;
+    --muted-foreground: 0.45 0.025 150;
 
-    /* Copper/gold accent */
-    --accent: 0.62 0.12 55;
-    --accent-foreground: 1 0 0;
+    --accent: 0.4 0.075 155;
+    --accent-foreground: 0.98 0.005 150;
 
     --destructive: 0.577 0.245 27.325;
     --destructive-foreground: 0.985 0 0;
 
-    --border: 0.88 0.018 85;
-    --input: 0.88 0.018 85;
-    --ring: 0.32 0.09 155;
+    --border: 0.88 0.014 150;
+    --input: 0.88 0.014 150;
+    --ring: 0.28 0.065 155;
 
     --radius: 0.5rem;
 
-    /* Dark forest for footer */
-    --navy: 0.2 0.07 155;
-    --navy-foreground: 0.93 0.012 85;
+    --chart-1: 0.55 0.09 155;
+    --chart-2: 0.4 0.08 155;
+    --chart-3: 0.62 0.1 55;
+    --chart-4: 0.7 0.06 85;
+    --chart-5: 0.3 0.07 155;
 
-    /* Chart */
-    --chart-1: 0.55 0.1 155;
-    --chart-2: 0.4 0.09 155;
-    --chart-3: 0.62 0.12 55;
-    --chart-4: 0.7 0.08 85;
-    --chart-5: 0.3 0.08 155;
-
-    /* Sidebar */
-    --sidebar: 0.93 0.012 85;
-    --sidebar-foreground: 0.15 0.015 85;
-    --sidebar-primary: 0.32 0.09 155;
-    --sidebar-primary-foreground: 0.97 0.008 85;
-    --sidebar-accent: 0.88 0.018 85;
-    --sidebar-accent-foreground: 0.15 0.015 85;
-    --sidebar-border: 0.88 0.018 85;
-    --sidebar-ring: 0.32 0.09 155;
+    --sidebar: 0.94 0.01 150;
+    --sidebar-foreground: 0.13 0.018 150;
+    --sidebar-primary: 0.28 0.065 155;
+    --sidebar-primary-foreground: 0.98 0.005 150;
+    --sidebar-accent: 0.88 0.014 150;
+    --sidebar-accent-foreground: 0.13 0.018 150;
+    --sidebar-border: 0.88 0.014 150;
+    --sidebar-ring: 0.28 0.065 155;
   }
 }
 
@@ -72,19 +66,22 @@
     font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
       sans-serif;
   }
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
 @layer utilities {
   .font-display {
     font-family: "Playfair Display", Georgia, serif;
   }
-  .text-navy {
-    color: oklch(var(--navy));
+  .bg-brand {
+    background-color: #1f3b2f;
   }
-  .bg-navy {
-    background-color: oklch(var(--navy));
+  .text-brand {
+    color: #1f3b2f;
   }
-  .text-navy-foreground {
-    color: oklch(var(--navy-foreground));
+  .border-brand {
+    border-color: #1f3b2f;
   }
 }

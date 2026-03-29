@@ -1,113 +1,55 @@
-import { Link } from "@tanstack/react-router";
-import { Facebook, Mail, MapPin, Phone } from "lucide-react";
+import { Facebook } from "lucide-react";
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const hostname = encodeURIComponent(window.location.hostname);
+  const hostname =
+    typeof window !== "undefined" ? window.location.hostname : "";
 
   return (
-    <footer className="bg-navy text-navy-foreground pt-12 pb-6">
-      <div className="container max-w-6xl mx-auto px-4">
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
-          {/* Brand */}
-          <div>
-            <div className="mb-3">
-              <span className="font-display text-xl font-bold text-primary">
-                Prints Charming
-              </span>
-              <div className="text-xs tracking-widest uppercase text-navy-foreground/60 mt-0.5">
-                Screen Printing &amp; Embroidery
-              </div>
-            </div>
-            <p className="text-sm text-navy-foreground/70 leading-relaxed">
-              Your local custom apparel shop for over 50 years in Roseburg, OR.
+    <footer style={{ backgroundColor: "#1F3B2F" }} className="text-white/80">
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="text-center md:text-left">
+            <p className="text-white font-bold text-lg">
+              Prints Charming Screen Printing &amp; Embroidery
+            </p>
+            <p className="text-sm mt-1">
+              419 SE Main St, Roseburg, OR 97470 &nbsp;|&nbsp; (541) 673-3716
+            </p>
+            <p className="text-sm">
+              <a
+                href="mailto:pctonlieorders@gmail.com"
+                className="hover:text-white transition-colors"
+              >
+                pctonlieorders@gmail.com
+              </a>
             </p>
           </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="font-semibold mb-4 text-navy-foreground">
-              Contact Us
-            </h4>
-            <div className="space-y-3 text-sm text-navy-foreground/70">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-0.5 text-primary shrink-0" />
-                <span>
-                  419 SE Main St
-                  <br />
-                  Roseburg, OR 97470
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-primary shrink-0" />
-                <a
-                  href="tel:5416733716"
-                  className="hover:text-primary transition-colors"
-                >
-                  (541) 673-3716
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-primary shrink-0" />
-                <a
-                  href="mailto:pctonlieorders@gmail.com"
-                  className="hover:text-primary transition-colors"
-                >
-                  pctonlieorders@gmail.com
-                </a>
-              </div>
-              <div className="flex items-center gap-2">
-                <Facebook className="w-4 h-4 text-primary shrink-0" />
-                <a
-                  href="https://www.facebook.com/PrinceCharmingRSBG"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors"
-                >
-                  Facebook
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Links */}
-          <div>
-            <h4 className="font-semibold mb-4 text-navy-foreground">
-              Quick Links
-            </h4>
-            <div className="space-y-2 text-sm">
-              <Link
-                to="/"
-                className="block text-navy-foreground/70 hover:text-primary transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                to="/small-orders"
-                className="block text-navy-foreground/70 hover:text-primary transition-colors"
-              >
-                Design on the Fly
-              </Link>
-              <Link
-                to="/quote"
-                className="block text-navy-foreground/70 hover:text-primary transition-colors"
-              >
-                Get a Quote
-              </Link>
-            </div>
+          <div className="flex flex-col items-center gap-3">
+            <a
+              href="https://www.facebook.com/PrinceCharmingRSBG"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-white/80 hover:text-white transition-colors"
+            >
+              <Facebook size={20} />
+              <span className="text-sm font-medium">Find us on Facebook</span>
+            </a>
           </div>
         </div>
-
-        <div className="border-t border-white/10 pt-6 text-center text-xs text-navy-foreground/50">
-          © {year} Prints Charming. Built with ♥ using{" "}
-          <a
-            href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${hostname}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary hover:underline"
-          >
-            caffeine.ai
-          </a>
+        <div className="border-t border-white/20 mt-8 pt-6 text-center text-xs text-white/50">
+          <p>
+            &copy; {year} Prints Charming Screen Printing &amp; Embroidery.
+            Built with <span className="text-white/70">&hearts;</span> using{" "}
+            <a
+              href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(hostname)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors"
+            >
+              caffeine.ai
+            </a>
+          </p>
         </div>
       </div>
     </footer>

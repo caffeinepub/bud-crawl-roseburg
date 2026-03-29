@@ -10,25 +10,17 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
-export interface ContactForm {
+export interface ContactSubmission {
   'name' : string,
   'email' : string,
   'message' : string,
-}
-export interface GalleryImage {
-  'id' : bigint,
-  'title' : string,
-  'description' : string,
-  'imageUrl' : string,
+  'phone' : string,
 }
 export interface _SERVICE {
-  'addGalleryImage' : ActorMethod<[GalleryImage], bigint>,
-  'deleteContact' : ActorMethod<[bigint], undefined>,
-  'deleteGalleryImage' : ActorMethod<[bigint], undefined>,
-  'getAllContacts' : ActorMethod<[], Array<ContactForm>>,
-  'getAllGalleryImages' : ActorMethod<[], Array<GalleryImage>>,
-  'getGalleryImage' : ActorMethod<[bigint], GalleryImage>,
-  'submitContact' : ActorMethod<[ContactForm], bigint>,
+  'deleteSubmission' : ActorMethod<[bigint], undefined>,
+  'getAllSubmissions' : ActorMethod<[], Array<ContactSubmission>>,
+  'getSubmission' : ActorMethod<[bigint], ContactSubmission>,
+  'submitContact' : ActorMethod<[ContactSubmission], bigint>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

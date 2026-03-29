@@ -89,113 +89,63 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface ContactForm {
+export interface ContactSubmission {
     name: string;
     email: string;
     message: string;
-}
-export interface GalleryImage {
-    id: bigint;
-    title: string;
-    description: string;
-    imageUrl: string;
+    phone: string;
 }
 export interface backendInterface {
-    addGalleryImage(image: GalleryImage): Promise<bigint>;
-    deleteContact(id: bigint): Promise<void>;
-    deleteGalleryImage(id: bigint): Promise<void>;
-    getAllContacts(): Promise<Array<ContactForm>>;
-    getAllGalleryImages(): Promise<Array<GalleryImage>>;
-    getGalleryImage(id: bigint): Promise<GalleryImage>;
-    submitContact(form: ContactForm): Promise<bigint>;
+    deleteSubmission(id: bigint): Promise<void>;
+    getAllSubmissions(): Promise<Array<ContactSubmission>>;
+    getSubmission(id: bigint): Promise<ContactSubmission>;
+    submitContact(form: ContactSubmission): Promise<bigint>;
 }
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async addGalleryImage(arg0: GalleryImage): Promise<bigint> {
+    async deleteSubmission(arg0: bigint): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.addGalleryImage(arg0);
+                const result = await this.actor.deleteSubmission(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.addGalleryImage(arg0);
+            const result = await this.actor.deleteSubmission(arg0);
             return result;
         }
     }
-    async deleteContact(arg0: bigint): Promise<void> {
+    async getAllSubmissions(): Promise<Array<ContactSubmission>> {
         if (this.processError) {
             try {
-                const result = await this.actor.deleteContact(arg0);
+                const result = await this.actor.getAllSubmissions();
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.deleteContact(arg0);
+            const result = await this.actor.getAllSubmissions();
             return result;
         }
     }
-    async deleteGalleryImage(arg0: bigint): Promise<void> {
+    async getSubmission(arg0: bigint): Promise<ContactSubmission> {
         if (this.processError) {
             try {
-                const result = await this.actor.deleteGalleryImage(arg0);
+                const result = await this.actor.getSubmission(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.deleteGalleryImage(arg0);
+            const result = await this.actor.getSubmission(arg0);
             return result;
         }
     }
-    async getAllContacts(): Promise<Array<ContactForm>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getAllContacts();
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getAllContacts();
-            return result;
-        }
-    }
-    async getAllGalleryImages(): Promise<Array<GalleryImage>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getAllGalleryImages();
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getAllGalleryImages();
-            return result;
-        }
-    }
-    async getGalleryImage(arg0: bigint): Promise<GalleryImage> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getGalleryImage(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getGalleryImage(arg0);
-            return result;
-        }
-    }
-    async submitContact(arg0: ContactForm): Promise<bigint> {
+    async submitContact(arg0: ContactSubmission): Promise<bigint> {
         if (this.processError) {
             try {
                 const result = await this.actor.submitContact(arg0);

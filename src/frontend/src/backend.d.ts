@@ -7,23 +7,15 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
-export interface ContactForm {
+export interface ContactSubmission {
     name: string;
     email: string;
     message: string;
-}
-export interface GalleryImage {
-    id: bigint;
-    title: string;
-    description: string;
-    imageUrl: string;
+    phone: string;
 }
 export interface backendInterface {
-    addGalleryImage(image: GalleryImage): Promise<bigint>;
-    deleteContact(id: bigint): Promise<void>;
-    deleteGalleryImage(id: bigint): Promise<void>;
-    getAllContacts(): Promise<Array<ContactForm>>;
-    getAllGalleryImages(): Promise<Array<GalleryImage>>;
-    getGalleryImage(id: bigint): Promise<GalleryImage>;
-    submitContact(form: ContactForm): Promise<bigint>;
+    deleteSubmission(id: bigint): Promise<void>;
+    getAllSubmissions(): Promise<Array<ContactSubmission>>;
+    getSubmission(id: bigint): Promise<ContactSubmission>;
+    submitContact(form: ContactSubmission): Promise<bigint>;
 }

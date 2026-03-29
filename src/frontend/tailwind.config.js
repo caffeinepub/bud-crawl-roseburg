@@ -16,8 +16,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Playfair Display', 'Georgia', 'serif'],
-        sans: ['DM Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        display: ["Playfair Display", "Georgia", "serif"],
+        sans: ["DM Sans", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
       },
       colors: {
         border: "oklch(var(--border))",
@@ -78,8 +78,8 @@ export default {
       },
       boxShadow: {
         xs: "0 1px 2px 0 rgba(0,0,0,0.05)",
-        blue: "0 8px 24px -4px rgba(30, 99, 184, 0.25)",
         card: "0 2px 12px 0 rgba(15,30,51,0.08)",
+        modal: "0 8px 32px 0 rgba(0,0,0,0.18)",
       },
       keyframes: {
         "accordion-down": {
