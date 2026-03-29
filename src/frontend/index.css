@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    /* Cannabis-themed color palette - Organic greens and earth tones */
+    --background: 0.96 0.015 120;
+    --foreground: 0.25 0.04 140;
+    --card: 0.98 0.012 110;
+    --card-foreground: 0.25 0.04 140;
+    --popover: 0.98 0.012 110;
+    --popover-foreground: 0.25 0.04 140;
+    /* Deep forest green primary */
+    --primary: 0.35 0.08 145;
+    --primary-foreground: 0.98 0.01 120;
+    /* Sage green secondary */
+    --secondary: 0.72 0.05 135;
+    --secondary-foreground: 0.25 0.04 140;
+    /* Muted earth tone */
+    --muted: 0.88 0.02 125;
+    --muted-foreground: 0.45 0.03 135;
+    /* Golden amber accent */
+    --accent: 0.75 0.12 75;
+    --accent-foreground: 0.25 0.04 80;
+    --destructive: 0.577 0.245 27.325;
+    --destructive-foreground: 0.985 0 0;
+    --border: 0.85 0.02 130;
+    --input: 0.85 0.02 130;
+    --ring: 0.35 0.08 145;
+    --chart-1: 0.35 0.08 145;
+    --chart-2: 0.72 0.05 135;
+    --chart-3: 0.75 0.12 75;
+    --chart-4: 0.55 0.06 150;
+    --chart-5: 0.68 0.08 95;
+  }
+
+  .dark {
+    /* Dark mode - deep forest night */
+    --background: 0.18 0.03 145;
+    --foreground: 0.92 0.015 125;
+    --card: 0.22 0.035 145;
+    --card-foreground: 0.92 0.015 125;
+    --popover: 0.22 0.035 145;
+    --popover-foreground: 0.92 0.015 125;
+    /* Bright sage green for dark mode */
+    --primary: 0.68 0.09 135;
+    --primary-foreground: 0.18 0.03 145;
+    /* Muted forest secondary */
+    --secondary: 0.32 0.06 145;
+    --secondary-foreground: 0.92 0.015 125;
+    --muted: 0.28 0.04 145;
+    --muted-foreground: 0.65 0.03 130;
+    /* Golden amber accent (brighter) */
+    --accent: 0.78 0.14 75;
+    --accent-foreground: 0.18 0.03 145;
+    --destructive: 0.704 0.191 22.216;
+    --destructive-foreground: 0.92 0.015 125;
+    --border: 0.32 0.04 145;
+    --input: 0.32 0.04 145;
+    --ring: 0.68 0.09 135;
+    --chart-1: 0.68 0.09 135;
+    --chart-2: 0.78 0.14 75;
+    --chart-3: 0.55 0.07 160;
+    --chart-4: 0.45 0.08 140;
+    --chart-5: 0.72 0.1 85;
+  }
+
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', Georgia, serif;
+  }
+}
