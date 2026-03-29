@@ -70,6 +70,7 @@ export default function Home() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           access_key: "250cf6ca-f92a-401f-9a50-48c93a35b62b",
+          botcheck: "",
           subject: "Website Contact Form - Prints Charming",
           from_name: name,
           email,
@@ -85,7 +86,10 @@ export default function Home() {
         setPhone("");
         setMessage("");
       } else {
-        setError("Something went wrong. Please try again or call us directly.");
+        setError(
+          data.message ||
+            "Something went wrong. Please try again or call us directly.",
+        );
       }
     } catch {
       setError("Network error. Please try again.");

@@ -48,6 +48,7 @@ export default function Quote() {
     try {
       const formData = new FormData();
       formData.append("access_key", "250cf6ca-f92a-401f-9a50-48c93a35b62b");
+      formData.append("botcheck", "");
       formData.append(
         "subject",
         `Quote Request${service ? ` - ${service}` : ""} - Prints Charming`,
@@ -68,7 +69,10 @@ export default function Quote() {
       if (data.success) {
         setSubmitted(true);
       } else {
-        setError("Submission failed. Please try again or contact us directly.");
+        setError(
+          data.message ||
+            "Submission failed. Please try again or contact us directly.",
+        );
       }
     } catch {
       setError("Network error. Please call us at (541) 673-3716.");
