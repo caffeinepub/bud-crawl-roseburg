@@ -14,6 +14,7 @@ import { useRef, useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import LogoSection from "../components/LogoSection";
+import { uploadArtwork } from "../utils/uploadArtwork";
 
 const SERVICES = [
   "Screen Printing",
@@ -46,24 +47,35 @@ export default function Quote() {
     setSubmitting(true);
     setError("");
     try {
-      const formData = new FormData();
-      formData.append("access_key", "250cf6ca-f92a-401f-9a50-48c93a35b62b");
-      formData.append("botcheck", "");
-      formData.append(
-        "subject",
-        `Quote Request${service ? ` - ${service}` : ""} - Prints Charming`,
-      );
-      formData.append("from_name", name);
-      formData.append("email", email);
-      formData.append("phone", phone || "Not provided");
-      formData.append("company", company || "Not provided");
-      formData.append("service_needed", service || "Not specified");
-      formData.append("estimated_quantity", quantity || "Not specified");
-      formData.append("description", details);
-      if (file) formData.append("attachment", file, file.name);
+      let artworkUrl = "";
+      if (file) {
+        artworkUrl = await uploadArtwork(file);
+      }
+
+      const payload: Record<string, string> = {
+        access_key: "250cf6ca-f92a-401f-9a50-48c93a35b62b",
+        botcheck: "",
+        subject: "New Quote Request - Prints Charming",
+        from_name: name,
+        email: email,
+        phone: phone || "Not provided",
+        company: company || "Not provided",
+        service_needed: service || "Not specified",
+        estimated_quantity: quantity || "Not specified",
+        description: details,
+      };
+
+      if (file && artworkUrl) {
+        payload.artwork_file_url = `${file.name} — ${artworkUrl}`;
+      }
+
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.success) {

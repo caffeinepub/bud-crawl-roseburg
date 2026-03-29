@@ -21,6 +21,7 @@ import ColorSelect from "../components/ColorSelect";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import LogoSection from "../components/LogoSection";
+import { uploadArtwork } from "../utils/uploadArtwork";
 
 type ModalType =
   | "hoodie"
@@ -193,28 +194,42 @@ function OrderForm({ type, onClose }: OrderFormProps) {
     setSubmitting(true);
     setError("");
     try {
-      const formData = new FormData();
-      formData.append("access_key", "250cf6ca-f92a-401f-9a50-48c93a35b62b");
-      formData.append("botcheck", "");
-      formData.append(
-        "subject",
-        `New ${product.label} Order - Prints Charming`,
-      );
-      formData.append("from_name", name);
-      formData.append("email", email);
-      formData.append("product", product.label);
-      formData.append("phone", phone);
-      if (type !== "hat") formData.append("size", size);
-      formData.append("color", color || "Not selected");
-      formData.append("placement", placement || "Not selected");
-      formData.append("quantity", String(qty));
-      formData.append("shipping", shippingLabel);
-      formData.append("order_total", `$${total.toFixed(2)}`);
-      formData.append("special_instructions", notes || "None");
-      if (file) formData.append("attachment", file, file.name);
+      let artworkUrl = "";
+      if (file) {
+        artworkUrl = await uploadArtwork(file);
+      }
+
+      const payload: Record<string, string> = {
+        access_key: "250cf6ca-f92a-401f-9a50-48c93a35b62b",
+        botcheck: "",
+        subject: `New ${product.label} Order - Prints Charming`,
+        from_name: name,
+        email: email,
+        product: product.label,
+        phone: phone,
+        color: color || "Not selected",
+        placement: placement || "Not selected",
+        quantity: String(qty),
+        shipping: shippingLabel,
+        order_total: `$${total.toFixed(2)}`,
+        special_instructions: notes || "None",
+      };
+
+      if (type !== "hat") {
+        payload.size = size;
+      }
+
+      if (file && artworkUrl) {
+        payload.artwork_file_url = `${file.name} — ${artworkUrl}`;
+      }
+
       const res = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.success) {
